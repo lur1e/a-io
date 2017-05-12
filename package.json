@@ -1,0 +1,14 @@
+{
+  "name": "modeling-app",
+  "version": "0.0.1",
+  "author" : "Yuliya",
+  "description": "Demo game in HTML5 using socket.io, canvas and node.js",
+  "dependencies": {
+    "express": "4.15.x",
+    "socket.io": "1.7.x",
+    "uuid": "3.0.x"
+  },
+  "engine": {
+    "node": "6.10.x"
+  }
+}
