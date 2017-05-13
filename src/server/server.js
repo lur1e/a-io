@@ -4,9 +4,18 @@ function GameServer(){
     this.tanks = [];
     this.balls = [];
     this.lastBallId = 0;
+
+    this.addAgent();
 }
 
 GameServer.prototype = {
+
+    addAgent: function(){
+        var initX = getRandomInt(40, 900);
+        var initY = getRandomInt(40, 500);
+        this.tanks.push({ id: "Agent_1", type: 1, hp: config.tank_hp, agent: true, x: initX, y: initY, isLocal: false,
+            baseAngle: 45})
+    },
 
     addTank: function(tank){
         this.tanks.push(tank);
@@ -32,6 +41,15 @@ GameServer.prototype = {
             }
         });
     },
+
+    moveAgents: function () {
+        this.tanks.forEach( function(tank){
+            if(tank.agent == true){
+                moveAgent(tank);
+            }
+        });
+    },
+
 
     //The app has absolute control of the balls and their movement
     syncBalls: function(){
@@ -122,6 +140,42 @@ Ball.prototype = {
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function randomBinomal(){
+    return Math.random() - Math.random();
+}
+
+function moveAgent(tank) {
+    x = 0
+    if(x === 0){
+        //console.log(tank.baseAngle);
+        var moveX = 5 * Math.sin(tank.baseAngle);
+        var moveY = 5 * Math.cos(tank.baseAngle);
+        if(tank.x + moveX > (0 + 30) && (tank.x + moveX) < (config.width - 30)){
+            tank.x += moveX;
+        }
+        else{
+            tank.baseAngle += 90;
+            tank.baseAngle = tank.baseAngle % 360;
+        }
+        if(tank.y + moveY > (0 + 30) && (tank.y + moveY) < (config.height - 30)){
+            tank.y += moveY;
+        }
+        else{
+            tank.baseAngle += 90;
+            tank.baseAngle = tank.baseAngle % 360;
+        }
+        //tank.x = tank.x + getRandomInt(-5,5);
+        //tank.y = tank.y + getRandomInt(-5,5);
+    }
+}
+
+function newmoveAgent(tank){
+    var angle = tank.baseAngle;
+    angle += randomBinomal() * 4;
+    var tangle = angle + tank.baseAngle;
+
 }
 
 module.exports = {

@@ -190,6 +190,7 @@ function Tank(id, type, $arena, game, isLocal, x, y, hp){
     this.isLocal = isLocal;
     this.hp = hp;
     this.dead = false;
+    this.agent = false;
 
     this.materialize();
 }

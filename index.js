@@ -11,9 +11,9 @@
     console.log('\t :: Express :: Listening on port ' + config.port);
 
 
-	var gserver= require('./src/server/server');
+	var gs= require('./src/server/server');
 
-	var game = new gserver.GameServer();
+	var gserver = new gs.GameServer();
 
 	/* Connection events */
 
@@ -21,42 +21,45 @@
 		console.log('User connected');
 
 		client.on('joinGame', function(tank){
-			console.log(tank.id + ' joined the game');
-			var initX = gserver.getRandomInt(40, 900);
-			var initY = gserver.getRandomInt(40, 500);
+			console.log(tank.id + ' joined the gserver');
+			var initX = gs.getRandomInt(40, 900);
+			var initY = gs.getRandomInt(40, 500);
 			client.emit('addTank', { id: tank.id, type: tank.type, isLocal: true, x: initX, y: initY, hp: config.tank_hp});
 			client.broadcast.emit('addTank', { id: tank.id, type: tank.type, isLocal: false, x: initX, y: initY, hp: config.tank_hp} );
 
-			game.addTank({ id: tank.id, type: tank.type, hp: config.tank_hp});
+			gserver.addTank({ id: tank.id, type: tank.type, hp: config.tank_hp});
 		});
 
 		client.on('sync', function(data){
 			//Receive data from clients
 			if(data.tank != undefined){
-				game.syncTank(data.tank);
+				gserver.syncTank(data.tank);
 			}
+			///!change agent pos
+            gserver.moveAgents();
+
 			//update ball positions
-			game.syncBalls();
+			gserver.syncBalls();
 			//Broadcast data to clients
-			client.emit('sync', game.getData());
-			client.broadcast.emit('sync', game.getData());
+			client.emit('sync', gserver.getData());
+			client.broadcast.emit('sync', gserver.getData());
 
 			//I do the cleanup after sending data, so the clients know
 			//when the tank dies and when the balls explode
-			game.cleanDeadTanks();
-			game.cleanDeadBalls();
+			gserver.cleanDeadTanks();
+			gserver.cleanDeadBalls();
 	//		counter ++;
 		});
 
 		client.on('shoot', function(ball){
-			var ball = new gserver.Ball(ball.ownerId, ball.alpha, ball.x, ball.y, game.lastBallId);
-			game.increaseLastBallId();
-			game.addBall(ball);
+			var ball = new gs.Ball(ball.ownerId, ball.alpha, ball.x, ball.y, gserver.lastBallId);
+			gserver.increaseLastBallId();
+			gserver.addBall(ball);
 		});
 
 		client.on('leaveGame', function(tankId){
-			console.log(tankId + ' has left the game');
-			game.removeTank(tankId);
+			console.log(tankId + ' has left the gserver');
+			gserver.removeTank(tankId);
 			client.broadcast.emit('removeTank', tankId);
 		});
 	});
