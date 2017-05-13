@@ -1,3 +1,5 @@
+var config = require('../../config.json');
+
 function GameServer(){
     this.tanks = [];
     this.balls = [];
@@ -38,8 +40,8 @@ GameServer.prototype = {
         this.balls.forEach( function(ball){
             self.detectCollision(ball);
 
-            if(ball.x < 0 || ball.x > config.WIDTH
-                || ball.y < 0 || ball.y > config.HEIGHT){
+            if(ball.x < 0 || ball.x > config.width
+                || ball.y < 0 || ball.y > config.height){
                 ball.out = true;
             }else{
                 ball.fly();
@@ -94,4 +96,38 @@ GameServer.prototype = {
         }
     }
 
+};
+
+
+function Ball(ownerId, alpha, x, y, ballId){
+    this.id = ballId;
+    this.ownerId = ownerId;
+    this.alpha = alpha; //angle of shot in radians
+    this.x = x;
+    this.y = y;
+    this.out = false;
 }
+
+Ball.prototype = {
+
+    fly: function(){
+        //move to trayectory
+        var speedX = config.ball_speed * Math.sin(this.alpha);
+        var speedY = -config.ball_speed * Math.cos(this.alpha);
+        this.x += speedX;
+        this.y += speedY;
+    }
+
+};
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+module.exports = {
+    GameServer : GameServer,
+    Ball: Ball,
+    getRandomInt: function (min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+};

@@ -1,0 +1,8 @@
+{
+  "host": "0.0.0.0",
+  "port": 5555,
+  "ball_speed": 10,
+  "width": 1100,
+  "height": 580,
+  "tank_hp": 100
+}
