@@ -40,7 +40,7 @@ body{
 	top: -25px;
 	width: 60px;
 	height: 80px;
-	background-image: url(../img/tank-cannon.png);
+	background-image: url(../img/4.png);
 	background-position: -10px 0;
 	-webkit-transform-origin: 30px 65px;
 	   -moz-transform-origin: 30px 65px;
@@ -156,13 +156,13 @@ body{
 
 /* skins */
 .tank1{
-	background-image: url(../img/tank-1-base.png);
+	background-image: url(../img/1.png);
 }
 
 .tank2{
-	background-image: url(../img/tank-2-base.png);
+	background-image: url(../img/2.png);
 }
 
 .tank3{
-	background-image: url(../img/tank-3-base.png);
+	background-image: url(../img/3.png);
 }
